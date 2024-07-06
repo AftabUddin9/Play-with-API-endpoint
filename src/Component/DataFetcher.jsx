@@ -6,9 +6,18 @@ import AlbumsCard from './Cards/AlbumsCard.jsx';
 import PhotosCard from './Cards/PhotosCard.jsx';
 import TodosCard from './Cards/TodosCard.jsx';
 import UsersCard from './Cards/UsersCard.jsx';
+import Pagination from './Pagination.jsx';
 
 const DataFetcher = ({ endpoint }) => {
     const [data, setData] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [postsPerPage, setPostsPerPage] = useState(10);
+
+    const lastPostIndex = currentPage * postsPerPage;
+    const firstPostIndex = lastPostIndex - postsPerPage;
+
+    const currentPosts = data.slice(firstPostIndex, lastPostIndex)
+
     const baseUrl = 'https://jsonplaceholder.typicode.com';
 
     useEffect(() => {
@@ -49,7 +58,11 @@ const DataFetcher = ({ endpoint }) => {
 
     return (
         <div className="">
-            {Component ? <Component data={data} /> : <div>No data available!</div>}
+            {Component ? <Component data={currentPosts} /> : <div>No data available!</div>}
+            <Pagination totalPosts={data.length}
+                postsPerPage={postsPerPage}
+                setCurrentPage={setCurrentPage}
+                currentPage={currentPage} />
         </div>
     );
 };
