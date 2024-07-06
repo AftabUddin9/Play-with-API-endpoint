@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import PostsCard from './Cards/PostsCard.jsx';
+import CommentsCard from './Cards/CommentsCard.jsx';
+import AlbumsCard from './Cards/AlbumsCard.jsx';
+import PhotosCard from './Cards/PhotosCard.jsx';
+import TodosCard from './Cards/TodosCard.jsx';
+import UsersCard from './Cards/UsersCard.jsx';
 
 const DataFetcher = ({ endpoint }) => {
     const [data, setData] = useState([]);
@@ -17,10 +23,33 @@ const DataFetcher = ({ endpoint }) => {
         fetchData();
     }, [endpoint]);
 
+    let Component;
+    switch (endpoint) {
+        case 'posts':
+            Component = PostsCard;
+            break;
+        case 'comments':
+            Component = CommentsCard;
+            break;
+        case 'albums':
+            Component = AlbumsCard;
+            break;
+        case 'photos':
+            Component = PhotosCard;
+            break;
+        case 'todos':
+            Component = TodosCard;
+            break;
+        case 'users':
+            Component = UsersCard;
+            break;
+        default:
+            Component = null;
+    }
+
     return (
-        <div>
-            <h1>Data from /{endpoint}</h1>
-            <pre>{JSON.stringify(data, null, 2)}</pre>
+        <div className="">
+            {Component ? <Component data={data} /> : <div>No data available!</div>}
         </div>
     );
 };

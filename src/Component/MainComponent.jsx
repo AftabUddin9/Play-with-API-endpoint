@@ -20,22 +20,25 @@ const MainComponent = () => {
     };
 
     return (
-        <div className="flex my-6 mx-4">
-            <div className='flex flex-col gap-y-8 mx-2 my-2'>
-                {
-                    sites.map((site) => {
-                        return (
-                            <div key={site.id} className='flex flex-col gap-y-2 m-2 p-2'>
-                                <button className='btn-main capitalize text-center justify-between hover:bg-pink-400 active:text-white' style={{ backgroundColor: activeButton === site.id ? "red" : "white" }}
+        <div className='flex flex-col gap-10'>
+            <h1 className='text-xl font-bold border-b-2 border-b-rose-700'>PLAY WITH API ENDPOINTS</h1>
+            <div>
+                <div className='flex justify-center mb-4'>
+                    {
+                        sites.map((site) => {
+                            return (
+                                <button key={site.id} className={`rounded-lg mx-2 p-2 capitalize text-center justify-between ${activeButton === site.id ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'} hover:bg-blue-300`}
                                     onClick={() => buttonClicked(site.id, site.endpoint)}>
                                     {site.endpoint}
                                 </button>
-                            </div>
-                        );
-                    })
-                }
+                            );
+                        })
+                    }
+                </div>
+                <div className=''>
+                    {activeButton && selectedEndpoint && <DataFetcher endpoint={selectedEndpoint} />}
+                </div>
             </div>
-            {selectedEndpoint && <DataFetcher endpoint={selectedEndpoint} />}
         </div>
     );
 };
