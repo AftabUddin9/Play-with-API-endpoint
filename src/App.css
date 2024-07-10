@@ -5,7 +5,14 @@
     text-align: center;
 }
 
-.pagination button {
+/* .pagination {
+    flex: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 4;
+}
+
+.page-item {
     width: 40px;
     height: 40px;
     font-family: inherit;
@@ -20,9 +27,9 @@
     border-color: #eee;
 }
 
-.pagination button.active {
+.active {
     font-weight: 900;
     border-color: #101010;
     background: #ffe400;
     color: #101010;
-}
+} */
