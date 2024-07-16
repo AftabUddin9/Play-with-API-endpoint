@@ -31,8 +31,8 @@ const DataFetcher = ({ endpoint, clientSearch, serverSearch, setClientData, setS
                         _limit: limit,
                     }
                 });
-                setMainData(response?.data);
-                const total = response.headers.get("x-total-count");
+                setMainData(response.data);
+                const total = parseInt(response.headers['x-total-count'], 10);
                 setPageCount(Math.ceil(total / limit));
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -92,10 +92,11 @@ const DataFetcher = ({ endpoint, clientSearch, serverSearch, setClientData, setS
     // const handlePageClick = async (data) => {
     //     console.log(data.selected);
     //     let currentPage = data.selected + 1
-    //     const dataFetched = await fetchalldata(currentPage);
+    //     const dataFetched = await fetchData(currentPage);
     //     setData(dataFetched);
     // }
-    const handlePageClick = (data) => {
+    const handlePageClick = async (data) => {
+        console.log(data.selected)
         setCurrentPage(data.selected + 1);
     };
 
@@ -139,7 +140,6 @@ const DataFetcher = ({ endpoint, clientSearch, serverSearch, setClientData, setS
 
                 </div>
                 : <div>No data available!</div>
-
             } */}
                     <ReactPaginate
                         previousLabel={"previous"}
@@ -159,6 +159,7 @@ const DataFetcher = ({ endpoint, clientSearch, serverSearch, setClientData, setS
                         breakClassName={"page-item"}
                         breakLinkClassName={"page-link"}
                         activeClassName={"active"}
+                        forcePage={currentPage - 1}
                     />
                 </>
             )}

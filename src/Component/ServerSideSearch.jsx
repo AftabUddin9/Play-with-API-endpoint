@@ -8,15 +8,15 @@ const ServerSideSearch = ({ setServerSearch }) => {
     };
 
     return (
-        <div className='flex flex-row justify-between'>
+        <div className='flex flex-row gap-4'>
             <input
                 type='text'
                 placeholder='Server-side search'
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className='border p-2 mb-4 rounded-lg'
+                className='grow border p-2 mb-4 rounded-lg text-slate-700'
             />
-            <button onClick={handleSearch} className='bg-blue-500 text-white p-2 rounded mb-4'>
+            <button onClick={handleSearch} className='bg-violet-500 text-white p-2 rounded mb-4'>
                 Search
             </button>
         </div>

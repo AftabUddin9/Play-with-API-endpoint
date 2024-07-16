@@ -17,7 +17,7 @@ const CardComponent = ({ data }) => {
                     </div>
 
                     <div className="border-solid border-b-2 border-gray-700 mb-2">
-                        <span className='text-lg font-semibold mb-2'>
+                        <span className='text-lg text-slate-700 font-semibold mb-2'>
                             {data.title ? `Title: ${data?.title}` :
                                 `Name: ${data?.name}`}
                         </span>

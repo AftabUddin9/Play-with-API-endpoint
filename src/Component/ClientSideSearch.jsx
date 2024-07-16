@@ -8,7 +8,7 @@ const ClientSideSearch = ({ clientSearch, setClientSearch }) => {
                 placeholder='Client-side Search'
                 value={clientSearch}
                 onChange={(e) => setClientSearch(e.target.value)}
-                className='border p-2 mb-4 rounded-lg'
+                className='border p-2 mb-4 rounded-lg text-slate-700'
             />
         </div>
     )
