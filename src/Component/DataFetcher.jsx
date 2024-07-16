@@ -10,43 +10,94 @@ import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import CardComponent from './CardComponent.jsx';
 
-const DataFetcher = ({ endpoint }) => {
+const DataFetcher = ({ endpoint, clientSearch, serverSearch, setClientData, setServerData }) => {
     const [data, setData] = useState([]);
-
     const [pageCount, setPageCount] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [mainData, setMainData] = useState([]);
 
     const limit = 10;
     const baseUrl = 'https://jsonplaceholder.typicode.com';
 
+    // fetch paginated data
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true);
             try {
-                const response = await axios.get(`${baseUrl}/${endpoint}?_page=1&_limit=${limit}`);
-                setData(response?.data);
+                const response = await axios.get(`${baseUrl}/${endpoint}`, {
+                    params: {
+                        _page: currentPage,
+                        _limit: limit,
+                    }
+                });
+                setMainData(response?.data);
                 const total = response.headers.get("x-total-count");
                 setPageCount(Math.ceil(total / limit));
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
+            setLoading(false);
         };
         fetchData();
-    }, [endpoint]);
+    }, [endpoint, currentPage]);
+
+    // Fetch server-side search results
+    useEffect(() => {
+        if (serverSearch) {
+            const fetchSearchData = async () => {
+                setLoading(true);
+                try {
+                    const response = await axios.get(`${baseUrl}/${endpoint}`, {
+                        params: {
+                            q: serverSearch,
+                        },
+                    });
+                    setServerData(response.data);
+                } catch (error) {
+                    console.error('Error fetching search data:', error);
+                }
+                setLoading(false);
+            };
+            fetchSearchData();
+        } else {
+            setServerData([]);
+        }
+    }, [serverSearch, endpoint, setServerData]);
+
+    // filter client side search results
+    useEffect(() => {
+        if (clientSearch) {
+            setClientData(
+                mainData.filter((item) =>
+                    Object.values(item).some((value) =>
+                        value.toString().toLowerCase().includes(clientSearch.toLowerCase())
+                    )
+                )
+            );
+        } else {
+            setClientData([]);
+        }
+    }, [clientSearch, mainData, setClientData]);
 
 
-    const fetchalldata = async (currentPage) => {
-        const res = await fetch(
-            `${baseUrl}/${endpoint}?_page=${currentPage}&_limit=${limit}`
-        );
-        const data = await res.json();
-        return data;
+    // const fetchalldata = async (currentPage) => {
+    //     const res = await fetch(
+    //         `${baseUrl}/${endpoint}?_page=${currentPage}&_limit=${limit}`
+    //     );
+    //     const data = await res.json();
+    //     return data;
+    // };
+
+    // const handlePageClick = async (data) => {
+    //     console.log(data.selected);
+    //     let currentPage = data.selected + 1
+    //     const dataFetched = await fetchalldata(currentPage);
+    //     setData(dataFetched);
+    // }
+    const handlePageClick = (data) => {
+        setCurrentPage(data.selected + 1);
     };
-
-    const handlePageClick = async (data) => {
-        console.log(data.selected);
-        let currentPage = data.selected + 1
-        const dataFetched = await fetchalldata(currentPage);
-        setData(dataFetched);
-    }
 
 
     // let Component;
@@ -75,8 +126,12 @@ const DataFetcher = ({ endpoint }) => {
 
     return (
         <div className="container">
-            <CardComponent data={data} />
-            {/* {Component ?
+            {loading ? (
+                <p>Loading...</p>
+            ) : (
+                <>
+                    <CardComponent data={mainData} />
+                    {/* {Component ?
                 <div className=' flex items-center justify-between'>
                     {
                         data && (<Component data={data} />)
@@ -86,25 +141,27 @@ const DataFetcher = ({ endpoint }) => {
                 : <div>No data available!</div>
 
             } */}
-            <ReactPaginate
-                previousLabel={"previous"}
-                nextLabel={"next"}
-                breakLabel={"..."}
-                pageCount={pageCount}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={3}
-                onPageChange={handlePageClick}
-                containerClassName={"pagination justify-content-center"}
-                pageClassName={"page-item"}
-                pageLinkClassName={"page-link"}
-                previousClassName={"page-item"}
-                previousLinkClassName={"page-link"}
-                nextClassName={"page-item"}
-                nextLinkClassName={"page-link"}
-                breakClassName={"page-item"}
-                breakLinkClassName={"page-link"}
-                activeClassName={"active"}
-            />
+                    <ReactPaginate
+                        previousLabel={"previous"}
+                        nextLabel={"next"}
+                        breakLabel={"..."}
+                        pageCount={pageCount}
+                        marginPagesDisplayed={2}
+                        pageRangeDisplayed={3}
+                        onPageChange={handlePageClick}
+                        containerClassName={"pagination justify-content-center"}
+                        pageClassName={"page-item"}
+                        pageLinkClassName={"page-link"}
+                        previousClassName={"page-item"}
+                        previousLinkClassName={"page-link"}
+                        nextClassName={"page-item"}
+                        nextLinkClassName={"page-link"}
+                        breakClassName={"page-item"}
+                        breakLinkClassName={"page-link"}
+                        activeClassName={"active"}
+                    />
+                </>
+            )}
         </div>
     );
 };
