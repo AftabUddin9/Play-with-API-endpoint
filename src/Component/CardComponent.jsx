@@ -2,10 +2,10 @@ import React from 'react'
 
 const CardComponent = ({ data }) => {
     return (
-        <div className=''>
+        <div className='flex space-x-4'>
             {data.map((data, id) =>
             (
-                <div key={id} className="bg-gray-300 shadow-md rounded-lg p-6 mb-4 max-w-md mx-auto">
+                <div key={id} className="bg-gray-100 shadow-md rounded-lg p-4 w-72 max-w-xs">
                     <div className="border-solid border-b-2 border-gray-700 flex justify-between items-center mb-4">
                         <span className="text-gray-600 mb-2">ID: {data.id}</span>
                         <span className="text-gray-600 mb-2">

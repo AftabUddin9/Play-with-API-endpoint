@@ -1,17 +1,18 @@
-import React from 'react'
+import React from 'react';
 
-const ClientSideSearch = ({ clientSearch, setClientSearch }) => {
+const ClientSearch = ({ setClientSearch }) => {
+    const handleSearch = (event) => {
+        setClientSearch(event.target.value);
+    };
+
     return (
-        <div className='flex flex-col'>
-            <input
-                type='text'
-                placeholder='Client-side Search'
-                value={clientSearch}
-                onChange={(e) => setClientSearch(e.target.value)}
-                className='border p-2 mb-4 rounded-lg text-slate-700'
-            />
-        </div>
-    )
-}
+        <input
+            type="text"
+            className="text-black border p-2 rounded w-1/2 mr-4"
+            placeholder="Client-side Search..."
+            onChange={handleSearch}
+        />
+    );
+};
 
-export default ClientSideSearch
+export default ClientSearch;
